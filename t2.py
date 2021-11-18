@@ -2,6 +2,9 @@ import math
 import csv
 import random
 
+# inputs
+k_clusters = 15
+
 # function that calculate euclidean distance for two instances
 def euclidean_d(point1x, point1y, point2x, point2y):
     distance = 0
@@ -31,7 +34,7 @@ def dataset():
     
     return instances
 
-# normalizes the dataset
+# normalizes the dataset (not necessary in the first case)
 def normalize(data_list, printer):
     max_attr = list(data_list[0])
     min_attr = list(data_list[0])
@@ -58,12 +61,26 @@ def normalize(data_list, printer):
     
     return data_list
 
-instances = dataset()
-print(instances[0])
-print(instances[4999])
-print(euclidean_d2(instances[0], instances[4999]))
+# RNG
+def rng(max_rand):
+    value = 0
 
-instances = normalize(instances, 1)
-print(instances[0])
-print(instances[4999])
-print(euclidean_d2(instances[0], instances[4999]))
+    random.seed()
+    value = int(random.random() * max_rand)
+
+    return value
+
+# generate k_clusters random centroids
+def centroids():
+    centroids = []
+    
+    for count in range(k_clusters):
+        centroid = []
+        centroid.append(rng(100000))
+        centroid.append(rng(100000))
+        centroids.append(list(centroid))
+    
+    return centroids
+
+
+
