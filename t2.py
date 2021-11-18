@@ -2,8 +2,8 @@ import math
 import csv
 import random
 
-# inputs
-k_clusters = 15
+max_range = 100000
+max_diagonal = 141421
 
 # function that calculate euclidean distance for two instances
 def euclidean_d(point1x, point1y, point2x, point2y):
@@ -71,16 +71,58 @@ def rng(max_rand):
     return value
 
 # generate k_clusters random centroids
-def centroids():
+def k_centroids(k_clusters):
     centroids = []
     
     for count in range(k_clusters):
         centroid = []
-        centroid.append(rng(100000))
-        centroid.append(rng(100000))
+        centroid.append(rng(max_range))
+        centroid.append(rng(max_range))
         centroids.append(list(centroid))
     
     return centroids
 
+def define_cluster(instances, centroids):
+    clusters = []
 
+    for i in range(k_clusters):
+        clusters.append([])
 
+    for instance in instances:
+        best_cluster = 0
+        best_distance = max_diagonal
+        for vector in range(k_clusters):
+            distance = euclidean_d2(instance, centroids[vector])
+            if distance < best_distance:
+                best_cluster = vector
+                best_distance = distance
+        clusters[best_cluster].append(instance)
+    
+    return clusters
+
+def redefine_clusters(clusters):    
+    new_centroids = []
+
+    for cluster in range(len(clusters)):
+        average_x = 0
+        average_y = 0
+        for instance in cluster:
+            average_x += instance[0]
+            average_y += instance[1]
+        average_x /= len(cluster)
+        average_y /= len(cluster)
+    new_centroids.append(list([average_x, average_y]))
+        
+
+#ROTINA PRINCIPAL (nao testada)
+
+k_clusters = 15
+
+instances = dataset()
+centroids = k_centroids(k_clusters)
+
+clusters = define_cluster(instances, centroids)
+
+new_centroids = redefine_clusters(clusters)
+
+#agora deveria medir a mudança e repetir ou nao
